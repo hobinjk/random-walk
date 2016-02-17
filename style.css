@@ -6,6 +6,9 @@
 body, pre {
   font-family: printchar, monospace;
 }
+pre {
+  white-space: pre-wrap;
+}
 
 h1 {
   font-weight: normal;
