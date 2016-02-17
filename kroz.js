@@ -1,7 +1,7 @@
 var content = document.getElementById('content');
 
 var item = [
-  'brown sack',
+  'sack',
   'apple',
   'potato',
   'leaflet',
@@ -33,7 +33,45 @@ var item = [
   'stiletto',
   'canary',
   'chalice',
-  'sword'
+  'sword',
+  'tome'
+];
+
+var itemAdjectives = [
+  'purple',
+  'black',
+  'burnt',
+  'garlic-scented',
+  'shadowy',
+  'shiny',
+  'glowing',
+  'burning',
+  'dim',
+  'pustulent',
+  'virulent',
+  'poisoned',
+  'watery',
+  'gold',
+  'silver',
+  '$gem-encrusted',
+  '$metal-plated',
+  'dusty'
+];
+
+var peopleAdjectives = [
+  'angry',
+  'sad',
+  'happy',
+  'nefarious',
+  'evil',
+  'good',
+  'unhelpful',
+  'helpful',
+  'shady',
+  'hopeful',
+  'fuming',
+  'malicious',
+  'gibbering'
 ];
 
 var enemies = [
@@ -56,23 +94,48 @@ var actions = [
   {
     name: 'go',
     text: '$move $direction',
-    responses: ['view', 'view', 'view', 'cant'] // 'cant'
+    responses: [
+      '$location.',
+      '$location.',
+      '$location.',
+      '$location. $view.',
+      '$location. $view.',
+      '$location. $view.',
+      '$location. $view.',
+      '$location. $view.',
+      '$location. $view...',
+      '$location. $view. $view.',
+      '$location. $view. $view.',
+      '$location. $view. $view...',
+      '$location. $view. $view. $view.',
+      '$cant.',
+      '$cant!'
+    ]
   }
 ];
 
-var responses = {
-  view: ['You are in a $place', 'You enter a $place',
-         'You find yourself in a $place'],
-  cant: ['You can\'t go that way', 'No, don\'t do that', 'It is impossible']
-};
-
 var words = {
+  location: ['You are in a $place', 'You enter a $place',
+             'You find yourself in a $place'],
+  view: [
+    'A $item $lies on the $furniture',
+    'A $itemAdjective $item $lies on the $furniture',
+    'You see a $itemAdjective $item before you',
+    'You see a $item before you'
+  ],
+  lies: ['lies', 'is', 'glitters', 'shines', 'oozes', 'is balanced'],
+  furniture: ['table', 'ground', 'cabinet', 'stump', 'grass', 'dirt', 'floor'],
+  cant: ['You can\'t go that way', 'No, don\'t do that', 'It is impossible'],
   place: ['field', 'clearing', 'forest', 'meadow', 'cave', 'swamp', 'city',
           'city square', 'castle'],
   move: ['go', 'walk', 'run', 'saunter', 'limp'],
   direction: ['north', 'east', 'south', 'west', 'out', 'in', 'left', 'right',
               'up', 'down'],
   item: item,
+  itemAdjective: itemAdjectives,
+  gem: ['ruby', 'sapphire', 'garnet', 'amethyst', 'pearl', 'topaz',
+        'malachite', 'jasper', 'quartz', 'peridot', 'sugilite'],
+  metal: ['silver', 'gold', 'bronze', 'copper', 'platinum'],
   enemy: enemies
 };
 /* 'look at $item',
@@ -89,11 +152,8 @@ function doTurn() {
   var action = randomChoice(actions);
   var actionText = fillPlaceholders(action.text);
 
-  var possibleResponses = action.responses.map(function(key) {
-    return responses[key];
-  });
-  var response = randomChoice(possibleResponses);
-  var responseText = fillPlaceholders(randomChoice(response));
+  var response = randomChoice(action.responses);
+  var responseText = fillPlaceholders(response);
 
   typeOut(actionText + '\n').then(function() {
     return sleep(500);
@@ -112,12 +172,9 @@ function randomChoice(arr) {
 
 function fillPlaceholders(text) {
   while (text.indexOf('$') >= 0) {
-    Object.keys(words).forEach(function(placeholder) {
-      var fills = words[placeholder];
-      while (text.indexOf('$' + placeholder) >= 0) {
-        text = text.replace('$' + placeholder, randomChoice(fills));
-      }
-    });
+    var placeholderStart = text.substr(text.indexOf('$') + 1);
+    var placeholder = placeholderStart.match(/^\w+/);
+    text = text.replace('$' + placeholder, randomChoice(words[placeholder]));
   }
   return text;
 }
