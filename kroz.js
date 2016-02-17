@@ -155,11 +155,13 @@ function doTurn() {
   var response = randomChoice(action.responses);
   var responseText = fillPlaceholders(response);
 
+  window.scroll(0, window.scrollMaxY);
   typeOut(actionText + '\n').then(function() {
     return sleep(500);
   }).then(function() {
     return putText(responseText + '\n\n>');
   }).then(function() {
+    window.scroll(0, window.scrollMaxY);
     return sleep(1000);
   }).then(function() {
     setTimeout(doTurn, 1000);
