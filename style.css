@@ -1,11 +1,21 @@
-@font-face {
+/*@font-face {
   font-family: printchar;
   src: url(PrintChar21.ttf);
-}
+}*/
 
 body, pre {
-  font-family: printchar, monospace;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
 }
+
+.action {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2rem;
+}
+
+.response {
+}
+
 pre {
   white-space: pre-wrap;
 }

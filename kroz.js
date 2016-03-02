@@ -47,47 +47,16 @@ var itemAdjectives = [
   'glowing',
   'burning',
   'dim',
-  'pustulent',
-  'virulent',
   'poisoned',
   'watery',
   'gold',
   'silver',
   '$gem-encrusted',
   '$metal-plated',
-  'dusty'
-];
-
-var peopleAdjectives = [
-  'angry',
-  'sad',
-  'happy',
-  'nefarious',
-  'evil',
-  'good',
-  'unhelpful',
-  'helpful',
-  'shady',
-  'hopeful',
-  'fuming',
-  'malicious',
-  'gibbering'
-];
-
-var enemies = [
-  'thief',
-  'cyclops',
-  'grue',
-  'keystone kop',
-  'wizard',
-  'dwarf',
-  'elf',
-  'hobbit',
-  'knight',
-  'squire',
-  'goblin',
-  'gnome',
-  'zombie'
+  'dusty',
+  'old',
+  'ancient',
+  'discarded'
 ];
 
 var actions = [
@@ -107,11 +76,23 @@ var actions = [
       '$location. $view. $view.',
       '$location. $view. $view.',
       '$location. $view. $view...',
-      '$location. $view. $view. $view.',
-      '$cant.',
-      '$cant!'
+      '$location. $view. $view. $view.'
     ]
-  }
+  },
+  {
+    name: 'look',
+    text: '$look $$item',
+    responses: [
+      '$itemDetail.'
+    ]
+  },
+  // {
+  //   name: 'wait',
+  //   text: '$wait',
+  //   responses: [
+  //     '$atmosphere.'
+  //   ]
+  // }
 ];
 
 var words = {
@@ -120,6 +101,8 @@ var words = {
   view: [
     'A $item $lies on the $furniture',
     'A $itemAdjective $item $lies on the $furniture',
+    'There is a $item on the $furniture',
+    'There is a $itemAdjective $item on the $furniture',
     'You see a $itemAdjective $item before you',
     'You see a $item before you'
   ],
@@ -128,19 +111,151 @@ var words = {
   cant: ['You can\'t go that way', 'No, don\'t do that', 'It is impossible'],
   place: ['field', 'clearing', 'forest', 'meadow', 'cave', 'swamp', 'city',
           'city square', 'castle'],
-  move: ['go', 'walk', 'run', 'saunter', 'limp'],
+  move: ['Walk', 'Stroll', 'Meander', 'Wander'],
   direction: ['north', 'east', 'south', 'west', 'out', 'in', 'left', 'right',
-              'up', 'down'],
+              'up', 'down', 'about', 'around'],
   item: item,
   itemAdjective: itemAdjectives,
   gem: ['ruby', 'sapphire', 'garnet', 'amethyst', 'pearl', 'topaz',
         'malachite', 'jasper', 'quartz', 'peridot', 'sugilite'],
   metal: ['silver', 'gold', 'bronze', 'copper', 'platinum'],
-  enemy: enemies
+  atmosphere: [
+    'Birdsong fills the air',
+    'A $temperature $wind $ruffles',
+    'A stream burbles just out of sight',
+    'The sun $suns',
+    'The moon $moons',
+    'A $spectacular sunset fills the sky with color',
+    '$stillness $envelopes your surroundings',
+    'The $chatter of a $city hums in the distance'
+  ],
+  suns: [
+    '$shines overhead',
+    'shines down from above',
+    'warms your $skin',
+    'casts a warm light from above'
+  ],
+  skin: [
+    'skin',
+    'face',
+    'body'
+  ],
+  moons: [
+    'illuminates the night',
+    'shines down from above',
+    '$shines alone in the sky',
+    '$shines, pale and lonely'
+  ],
+  shines: [
+    'hangs',
+    'gleams',
+    'shines'
+  ],
+  temperature: [
+    'cold',
+    'cool',
+    'warm',
+    'calm',
+    'soothing'
+  ],
+  wind: [
+    'wind',
+    'breeze',
+    'wind'
+  ],
+  ruffles: [
+    'ruffles your hair',
+    'blows past you',
+    'caresses your face',
+    'tugs at your clothing'
+  ],
+  spectacular: [
+    'spectacular',
+    'awe-inspiring',
+    'brilliant',
+    'majestic'
+  ],
+  envelopes: [
+    'envelopes',
+    'covers',
+    'cocoons',
+    'permeates'
+  ],
+  stillness: [
+    'Stillness',
+    'Peace',
+    'Calm'
+  ],
+  chatter: [
+    'chatter',
+    'bustle',
+    'hustle and bustle'
+  ],
+  city: [
+    'city',
+    'town',
+    'village'
+  ],
+  wait: [
+    'Wait',
+    'Stand still',
+    'Rest',
+    'Stay here',
+    'Pause here',
+    'Be at peace'
+  ],
+  look: [
+    'Look at the',
+    'Inspect the',
+    'Gaze at the',
+    'Pick up the'
+  ],
+
+  itemDetail: [
+    'You pick up the $$item, holding it close',
+    'The $$item is $surprisingly $surprisingAdjective',
+    'The $$item crumbles to dust',
+    'The $$item $itemIdles',
+    'The $$item feels $itemFeeling'
+  ],
+  surprisingly: [
+    'surprisingly',
+    'unexpectedly'
+  ],
+  surprisingAdjective: [
+    'heavy',
+    'light',
+    'solid',
+    'lustrous',
+    'shiny',
+    'dull',
+    'fragile',
+    'simple',
+    'ornate'
+  ],
+  itemIdles: [
+    'hums',
+    'whirs',
+    'pulses',
+    'lies still',
+    'twists in your hand'
+  ],
+  itemFeeling: [
+    'warm',
+    'cold',
+    'hot',
+    'freezing',
+    'dusty',
+    'clean',
+    'light',
+    'full of energy',
+    'heavy',
+    'expensive',
+    'fragile',
+    'old',
+    'ancient'
+  ]
 };
-/* 'look at $item',
-'look at $furniture',
-'attack $enemy' */
 
 function sleep(delay) {
   return new Promise(function(res) {
@@ -148,21 +263,35 @@ function sleep(delay) {
   });
 }
 
+var lastItem = '';
+var turn = 0;
+
 function doTurn() {
   var action = randomChoice(actions);
+
+  while (action.name === 'look' && !lastItem) {
+    action = randomChoice(actions);
+  }
+
+  if (action.name === 'go') {
+    lastItem = '';
+  }
+
   var actionText = fillPlaceholders(action.text);
 
+  console.log('before', lastItem);
   var response = randomChoice(action.responses);
   var responseText = fillPlaceholders(response);
+  console.log('after', lastItem);
 
-  window.scroll(0, 9001 * 9001);
-  typeOut(actionText + '\n').then(function() {
-    return sleep(500);
+  typeOut('action', '>', false).then(function(box) {
+    return sleep(2000 + Math.random() * 1000).then(function() {
+      return typeOutInBox(box, actionText, true);
+    });
   }).then(function() {
-    return putText(responseText + '\n\n>');
+    return sleep(750);
   }).then(function() {
-    window.scroll(0, 9001 * 9001);
-    return sleep(1000);
+    return typeOut('response', responseText, false);
   }).then(function() {
     setTimeout(doTurn, 1000);
   });
@@ -175,32 +304,48 @@ function randomChoice(arr) {
 function fillPlaceholders(text) {
   while (text.indexOf('$') >= 0) {
     var placeholderStart = text.substr(text.indexOf('$') + 1);
-    var placeholder = placeholderStart.match(/^\w+/);
-    text = text.replace('$' + placeholder, randomChoice(words[placeholder]));
+    var placeholder = placeholderStart.match(/^\$?\w+/)[0];
+    if (placeholder === '$item') {
+      text = text.replace('$$item', lastItem);
+    } else {
+      var placeWords = words[placeholder];
+      if (!placeWords) {
+        console.warn(placeholder + ' is not fully defined');
+      }
+      var placedWord = randomChoice(placeWords);
+      if (placeholder === 'item') {
+        lastItem = placedWord;
+      }
+      text = text.replace('$' + placeholder, placedWord);
+    }
   }
   return text;
 }
 
-function putText(text) {
-  return new Promise(function(resolve) {
-    content.textContent += text;
-    resolve();
-  });
+function typeOut(textClass, text, vary) {
+  var textBox = document.createElement('pre');
+  textBox.classList.add(textClass);
+  content.appendChild(textBox);
+
+  return typeOutInBox(textBox, text, vary);
 }
 
-function typeOut(text) {
+// Pure function to use recursively out of laziness
+function typeOutInBox(textBox, text, vary) {
+  window.scroll(0, 9001 * 9001);
   if (text.length === 0) {
     return new Promise(function(resolve) {
-      resolve();
+      resolve(textBox);
     });
   }
+
   return new Promise(function(resolve, reject) {
-    content.textContent += text[0];
+    textBox.textContent += text[0];
     setTimeout(function() {
-      resolve();
-    }, 50 + Math.random() * 30);
+      resolve(textBox);
+    }, 75 + (vary ? 1 : 0) * Math.random() * 50);
   }).then(function() {
-    return typeOut(text.substr(1));
+    return typeOutInBox(textBox, text.substr(1));
   });
 }
 
