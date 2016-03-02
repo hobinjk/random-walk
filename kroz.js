@@ -81,7 +81,7 @@ var actions = [
   },
   {
     name: 'look',
-    text: '$look $$item',
+    text: '$look $lastItem',
     responses: [
       '$itemDetail.'
     ]
@@ -212,11 +212,11 @@ var words = {
   ],
 
   itemDetail: [
-    'You pick up the $$item, holding it close',
-    'The $$item is $surprisingly $surprisingAdjective',
-    'The $$item crumbles to dust',
-    'The $$item $itemIdles',
-    'The $$item feels $itemFeeling'
+    'You pick up the $lastItem, holding it close',
+    'The $lastItem is $surprisingly $surprisingAdjective',
+    'The $lastItem crumbles to dust',
+    'The $lastItem $itemIdles',
+    'The $lastItem feels $itemFeeling'
   ],
   surprisingly: [
     'surprisingly',
@@ -263,26 +263,24 @@ function sleep(delay) {
   });
 }
 
-var lastItem = '';
+words.lastItem = [];
 var turn = 0;
 
 function doTurn() {
   var action = randomChoice(actions);
 
-  while (action.name === 'look' && !lastItem) {
+  while (action.name === 'look' && words.lastItem.length === 0) {
     action = randomChoice(actions);
   }
 
   if (action.name === 'go') {
-    lastItem = '';
+    words.lastItem = [];
   }
 
   var actionText = fillPlaceholders(action.text);
 
-  console.log('before', lastItem);
   var response = randomChoice(action.responses);
   var responseText = fillPlaceholders(response);
-  console.log('after', lastItem);
 
   typeOut('action', '>', false).then(function(box) {
     return sleep(2000 + Math.random() * 1000).then(function() {
@@ -304,20 +302,16 @@ function randomChoice(arr) {
 function fillPlaceholders(text) {
   while (text.indexOf('$') >= 0) {
     var placeholderStart = text.substr(text.indexOf('$') + 1);
-    var placeholder = placeholderStart.match(/^\$?\w+/)[0];
-    if (placeholder === '$item') {
-      text = text.replace('$$item', lastItem);
-    } else {
-      var placeWords = words[placeholder];
-      if (!placeWords) {
-        console.warn(placeholder + ' is not fully defined');
-      }
-      var placedWord = randomChoice(placeWords);
-      if (placeholder === 'item') {
-        lastItem = placedWord;
-      }
-      text = text.replace('$' + placeholder, placedWord);
+    var placeholder = placeholderStart.match(/^\w+/)[0];
+    var placeWords = words[placeholder];
+    if (!placeWords) {
+      console.warn(placeholder + ' is not fully defined');
     }
+    var placedWord = randomChoice(placeWords);
+    if (placeholder === 'item' && placedWord) {
+      words.lastItem = [placedWord];
+    }
+    text = text.replace('$' + placeholder, placedWord);
   }
   return text;
 }
