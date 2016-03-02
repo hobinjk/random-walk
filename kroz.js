@@ -86,13 +86,13 @@ var actions = [
       '$itemDetail.'
     ]
   },
-  // {
-  //   name: 'wait',
-  //   text: '$wait',
-  //   responses: [
-  //     '$atmosphere.'
-  //   ]
-  // }
+  {
+    name: 'wait',
+    text: '$wait',
+    responses: [
+      '$atmosphere.'
+    ]
+  }
 ];
 
 var words = {
